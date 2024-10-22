@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 
 type IssueForm = z.infer<typeof createIssueSchema>
@@ -21,6 +22,7 @@ const NewIssuesPage = () => {
   const { register, handleSubmit, control, formState:{errors} } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema)
   });
+  const [isSubmitting, setSubmitting] = useState(false)
   const [error, setError] = useState("");
 
   return (
@@ -35,9 +37,11 @@ const NewIssuesPage = () => {
       <form
         onSubmit={handleSubmit(async(data) => {
           try {
+            setSubmitting(true);
             await axios.post("/api/issues/", data);
             router.push("/issues");
           } catch (error) {
+            setSubmitting(false);
             setError("Failed to create issue. Please try again later.");
             console.log(error)
           }
@@ -63,7 +67,7 @@ const NewIssuesPage = () => {
         />
        <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner/>}</Button>
       </form>
     </div>
   );
