@@ -1,8 +1,6 @@
-import { Result } from 'postcss';
-import { string } from './../../../../node_modules/micromark/dev/lib/constructs.d';
-import { NextRequest, NextResponse } from "next/server";
 import { issueSchema } from '@/app/validationSchema';
 import prisma from '@/prisma/client';
+import { NextRequest, NextResponse } from "next/server";
 
 // interface Props {
 //     params: {params: {id: string}}
