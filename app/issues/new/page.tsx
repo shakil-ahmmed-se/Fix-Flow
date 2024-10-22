@@ -25,6 +25,18 @@ const NewIssuesPage = () => {
   const [isSubmitting, setSubmitting] = useState(false)
   const [error, setError] = useState("");
 
+  const onSubmit = handleSubmit(async(data) => {
+    try {
+      setSubmitting(true);
+      await axios.post("/api/issues/", data);
+      router.push("/issues"); 
+    } catch (error) {
+      setSubmitting(false);
+      setError("Failed to create issue. Please try again later.");
+      console.log(error)
+    }
+  })
+
   return (
     <div className="max-w-xl m-auto ">
       {error && (
@@ -35,17 +47,7 @@ const NewIssuesPage = () => {
         </Callout.Root>
       )}
       <form
-        onSubmit={handleSubmit(async(data) => {
-          try {
-            setSubmitting(true);
-            await axios.post("/api/issues/", data);
-            router.push("/issues");
-          } catch (error) {
-            setSubmitting(false);
-            setError("Failed to create issue. Please try again later.");
-            console.log(error)
-          }
-        })}
+        onSubmit={onSubmit}
         className="space-y-4"
       >
         <h1 className="text-2xl">Create New Issues</h1>
