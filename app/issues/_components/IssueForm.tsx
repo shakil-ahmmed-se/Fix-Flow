@@ -23,12 +23,7 @@ interface Props {
 
 const IssueForm = ({issue}: Props) => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IssueFormData>({
+  const { register, handleSubmit, control, formState: { errors },} = useForm<IssueFormData>({
     resolver: zodResolver(issueSchema),
   });
   const [isSubmitting, setSubmitting] = useState(false);
@@ -50,7 +45,7 @@ const IssueForm = ({issue}: Props) => {
   });
 
   return (
-    <div className="max-w-xl m-auto ">
+    <div className="max-w-xl ">
       {error && (
         <Callout.Root color="red">
           <Callout.Text>{error}</Callout.Text>
